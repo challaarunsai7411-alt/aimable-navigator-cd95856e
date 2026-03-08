@@ -6,6 +6,21 @@ interface ResultCardProps {
 }
 
 const ResultCard = ({ result }: ResultCardProps) => {
+  const speak = (text: string) => {
+    if ("speechSynthesis" in window) {
+      speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.rate = 0.9;
+      speechSynthesis.speak(utterance);
+    }
+  };
+
+  // Auto-speak result on mount for accessibility
+  useState(() => {
+    const plainText = result.replace(/[*#_`]/g, "");
+    speak("Task complete. " + plainText);
+  });
+
   const handleSpeak = () => {
     if ("speechSynthesis" in window) {
       const plainText = result.replace(/[*#_`]/g, "");
