@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { motion } from "framer-motion";
+import { CheckCircle2, Volume2 } from "lucide-react";
 
 interface ResultCardProps {
   result: string;
@@ -15,19 +16,15 @@ const ResultCard = ({ result }: ResultCardProps) => {
     }
   };
 
-  // Auto-speak result on mount for accessibility
-  useState(() => {
+  // Auto-speak result on mount for blind users
+  useEffect(() => {
     const plainText = result.replace(/[*#_`]/g, "");
     speak("Task complete. " + plainText);
-  });
+  }, [result]);
 
   const handleSpeak = () => {
-    if ("speechSynthesis" in window) {
-      const plainText = result.replace(/[*#_`]/g, "");
-      const utterance = new SpeechSynthesisUtterance(plainText);
-      utterance.rate = 0.9;
-      speechSynthesis.speak(utterance);
-    }
+    const plainText = result.replace(/[*#_`]/g, "");
+    speak(plainText);
   };
 
   // Simple markdown-ish rendering
@@ -49,6 +46,8 @@ const ResultCard = ({ result }: ResultCardProps) => {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       className="w-full max-w-3xl mx-auto rounded-xl border border-primary/30 bg-card p-6 glow-primary space-y-4"
+      role="alert"
+      aria-live="assertive"
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
