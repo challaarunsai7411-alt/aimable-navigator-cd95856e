@@ -1,5 +1,5 @@
+import { useEffect } from "react";
 import { motion } from "framer-motion";
-import { CheckCircle2, Volume2 } from "lucide-react";
 
 interface ResultCardProps {
   result: string;
